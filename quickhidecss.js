@@ -2,11 +2,8 @@ const Plugin = require("../plugin");
 const css = require("./css_loader.js");
 
 const toggleCSS = () => {
-	if (window.customCss || window.cssWatcher) {
-		css.unload();
-	} else {
-		css.load();
-	}
+	if (window.customCss || window.cssWatcher) css.unload();
+	else css.load();
 };
 
 module.exports = new Plugin({
