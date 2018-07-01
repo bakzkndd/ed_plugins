@@ -5,7 +5,7 @@ Custom RPC uses the [ms](https://www.npmjs.com/package/ms) node module to conver
 ## Elapsing time:
 With Custom RPC, setting time to elapse is as easy as simply ticking the elapse time checkbox and the time on your RPC will elapse.
 
-**Note**: If you provide a time to countdown to, the countdown will override any elapsing time. Do not use both at the same time.
+**Note**: If you provide a time to countdown to; the countdown will override any elapsing time. Do not use both at the same time.
 
 ## Counting down time:
 Examples of parsable data: <br>
