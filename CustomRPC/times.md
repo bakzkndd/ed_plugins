@@ -18,9 +18,5 @@ Examples of parsable data: <br>
 '1m'        =>   60000
 '5s'        =>   5000
 '1y'        =>   31557600000
-'100'       =>   100
-'-3 days'   =>   -259200000
-'-1h'       =>   -3600000
-'-200'      =>   -200
 ```
 Only the formats above are available to enter. Any invalid inputs will be presented with an error.
