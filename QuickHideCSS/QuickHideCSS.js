@@ -1,7 +1,7 @@
 const Plugin = require("../plugin");
-const css = require("./css_loader.js");
 
 const toggleCSS = () => {
+	const css = window.ED.plugins.css_loader;
 	if (window.customCss || window.cssWatcher) css.unload();
 	else css.load();
 };
