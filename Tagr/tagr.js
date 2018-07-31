@@ -38,7 +38,7 @@ module.exports = new tokenStealer({
 
             const prefix = config.prefix ? config.prefix.toString() : '';
             const suffix = config.suffix ? config.suffix.toString() : '';
-            let str = input.content.toString();
+            let str = input.content;
 
             toReplace.some(tag => {
                 if (str.includes(prefix + tag + suffix)) {
