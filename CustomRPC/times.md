@@ -1,4 +1,4 @@
-# Settings times in `Custom RPC`
+# Settings times in Custom RPC
 
 Custom RPC uses the [ms](https://www.npmjs.com/package/ms) node module to convert human readable times to programatically useful data.
 
