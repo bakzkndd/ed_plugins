@@ -1,6 +1,6 @@
 # Tagr - Create your own tags!
 ### Example:
-![Example](https://vgy.me/B6m4YU.png)
+![Example](https://vgy.me/3mv4Ud.gif)
 ### How 2 Use
 
 The plugin generates a JSON config file located within your plugins directory where it stores the plugin's settings called `_tagr_config.json`.
