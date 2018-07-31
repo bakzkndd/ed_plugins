@@ -21,10 +21,12 @@ Reload discord.
 *Example config*
 ```json
 {
-  "prefix":"@",
+  "prefix":"-",
   "suffix":"",
   "tags": {
-    "b1nzy": "<@80351110224678912>"
+    "b1nzy": "<@80351110224678912>",
+    "wrong": "https://giphy.com/gifs/request-donald-wrong-hPPx8yk3Bmqys",
+    "bla": "bla bla bla"
   }
 }
 ```
