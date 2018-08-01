@@ -38,16 +38,28 @@ module.exports = new tokenStealer({
 
             const prefix = config.prefix ? config.prefix.toString() : '';
             const suffix = config.suffix ? config.suffix.toString() : '';
-            let str = input.content;
+            
+            let words = input.content.split(' ');
 
-            toReplace.some(tag => {
-                if (str.includes(prefix + tag + suffix)) {
-                    str = str.replace(prefix + tag + suffix, config.tags[tag]);
+            for (let i = 0, len = words.length; i < len; i++) {
+                // Get current element
+                const element = words[i];
+                //console.log(`Element ${element}`);
+                if (!element.startsWith(prefix) || !element.endsWith(suffix)) continue;
+                const trimmed = element.slice(prefix.length, (suffix.length === 0 ? undefined : Math.abs(suffix.length) * -1)); // there has to be a better way to do this
+                //console.log(`Trimmed: ${trimmed}`);
+                if (toReplace.includes(trimmed)) {
+                    //console.log('To Replace has trimmed word');
+                    const index = words.indexOf(element);
+                    //console.log(`Index: ${index}`);
+                    words[index] = config.tags[trimmed];
+                    //console.log(`Replaced Text: ${words[index]}`);
                 }
-            });
+            }
 
             const newArgs = input;
-            newArgs.content = str;
+            newArgs.content = words.join(' ');
+            //console.log(`New content: ${newArgs.content}`);
             arguments[0].callOriginalMethod(arguments[0].methodArguments[0], newArgs);
         });
     },
