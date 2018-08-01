@@ -1,4 +1,5 @@
 # Tagr - Create your own tags!
+[<img src="https://img.shields.io/badge/EnhancedDiscord%20Plugin-Click%20to%20Download-red.svg?longCache=true&style=flat-square&logo=discord">](http://35.185.30.35:3000/dd?url=https://raw.githubusercontent.com/jakuski/ed_plugins/master/Tagr/tagr.js)
 ### Example:
 ![Example](https://vgy.me/3mv4Ud.gif)
 ### How 2 Use
