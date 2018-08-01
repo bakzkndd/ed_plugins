@@ -4,7 +4,7 @@ const Plugin = require("../plugin");
 
 module.exports = new Plugin({
 	name:"Do Not Track Port",
-	description: "A port of the <a href=\"https://github.com/rauenzi/BetterDiscordAddons/blob/master/Plugins/DoNotTrack\" target=\"_blank\">Do Not Track</a> BD plugin by <a href=\"https://github.com/rauenzi/\" target=\"_blank\">Zerebros#7790</a>.",
+	description: "A port of the <a href=\"https://github.com/rauenzi/BetterDiscordAddons/blob/master/Plugins/DoNotTrack\" target=\"_blank\">Do Not Track</a> BD plugin by <a href=\"https://github.com/rauenzi/\" target=\"_blank\">Zerebos#7790</a>.",
 	author: "jakuski",
 	"color": "#d15353",
 	preload: false,
