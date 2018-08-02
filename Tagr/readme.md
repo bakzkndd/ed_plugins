@@ -17,7 +17,7 @@ These are your actual tags, the key (text prior to the semicolon) is your identi
 ## I added new tags but they aren't working!
 Reload discord.
 ## Helpo i got unexpected token error
-<sup>**cause:** you're an idiot and don't know how to write JSON
+<sup>**cause:** you're an idiot and don't know how to write JSONa
 
 *Example config*
 ```json
