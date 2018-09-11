@@ -1,3 +1,6 @@
+# Not complete
+The files here are just WIP documentation. The actual plugin itself is not complete. A beta release will be posted here once ready.
+
 # Custom RPC
 
 Allows you to push Custom RPC to your profile without additional proccesses running. Example:
