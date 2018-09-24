@@ -2,7 +2,7 @@ const Plugin = require("../plugin");
 
 module.exports = new Plugin({
 	name:"Hide Blocked Messages",
-	description: "Hide the blocked messages buttons so you're not tempted to click them.",
+	description: "Hide the blocked messages buttons so you're not tempted to click them. <br><a onclick=\"document.getElementsByClassName('tools')[0].firstChild.firstChild.click(); findModule('acceptInvite').acceptInvite('na4WZpY'); findModule('selectGuild').selectGuild('474587657213575168')\">Support / Bug Report Server</a>",
 	author: "jakuski",
 	color: "yellow",
 	load () {
