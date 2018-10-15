@@ -9,10 +9,20 @@ module.exports = new Plugin({
 	"color": "#d15353",
 	preload: false,
 	load: function () {
-		monkeyPatch( findModule("AnalyticEventConfigs"), "AnalyticEventConfigs", () => {});
-		monkeyPatch( findModule("consoleWarning"), "consoleWarning", () => {});
-		monkeyPatch( findModule("wrapMethod"), "wrapMethod", () => {});
-		monkeyPatch( findModule("_wrappedBuiltIns"), "_wrappedBuiltIns", () => {});
+		monkeyPatch(findModule("AnalyticEventConfigs"), "AnalyticEventConfigs", () => {});
+		monkeyPatch(findModule("consoleWarning"), "consoleWarning", () => {});
+		monkeyPatch(findModule("wrapMethod"), "wrapMethod", () => {});
+		monkeyPatch(findModule("_wrappedBuiltIns"), "_wrappedBuiltIns", () => {});
+
+		findModule("_originalConsoleMethods").uninstall();
+
+		monkeyPatch(findModule("_originalConsoleMethods"), "_breadcrumbEventHandler", () => () => {});
+		monkeyPatch(findModule("_originalConsoleMethods"), "captureBreadcrumb", () => {});
+		monkeyPatch(findModule("_originalConsoleMethods"), "_makeRequest", () => {});
+		monkeyPatch(findModule("_originalConsoleMethods"), "_sendProcessedPayload", () => {});
+		monkeyPatch(findModule("_originalConsoleMethods"), "_send", () => {});
+
+		Object.assign(window.console, findModule("_originalConsoleMethods")._originalConsoleMethods);
 	},
 	unload: function () {
 		findModule("AnalyticEventConfigs").AnalyticEventConfigs.unpatch();
