@@ -1,6 +1,7 @@
-# Not complete
-The files here are just WIP documentation. The actual plugin itself is not complete. A beta release will be posted here once ready.
-
+# Beta Plugin
+This plugin is in the beta phase and not all features are completed. The following is on the todo list before its final release:
+- Saving settings
+- More friendly errors (don't just chuck them in button labels)
 # Custom RPC
 
 Allows you to push Custom RPC to your profile without additional proccesses running. Example:
