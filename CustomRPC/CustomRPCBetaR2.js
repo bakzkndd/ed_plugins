@@ -18,7 +18,7 @@ window.findModuleByFilter = filter => {
 const f = window.findModuleByFilter;
 
 module.exports = new Plugin({
-	name: "CustomRPC Beta R1",
+	name: "CustomRPC Beta R2",
 	author: "jakuski",
 	description: "Add custom Rich Presence to your profile without additional processes. <br><a onclick=\"document.querySelector('[class^=\\'closeButton-\\']').click(); findModule('acceptInvite').acceptInvite('na4WZpY'); findModule('selectGuild').selectGuild('474587657213575168')\">Support / Bug Report Server</a>",
 	preload: false,
@@ -170,15 +170,15 @@ module.exports = new Plugin({
 	},
 	components: {
 		cs: { // short for class strings
-			descDefault: `${window.ED.classMaps.description.description} ${window.ED.classMaps.description.modeDefault}`,
-			desc: window.ED.classMaps.description.description,
+			descDefault: `${findModule("formText").description} ${findModule("formText").modeDefault}`,
+			desc: findModule("formText").description,
 			smallModal: `${findModule("sizeSmall").modal} ${findModule("sizeSmall").sizeSmall}`,
 			modalHeaderWrap: findModule("sizeSmall").header,
-			modalHeader: `${window.ED.classMaps.headers.h4} ${window.ED.classMaps.headers.defaultColor}`,
-			centre: window.ED.classMaps.alignment.flexCenter,
+			modalHeader: `${findModule("defaultMarginh2").h4} ${findModule("defaultMarginh2").defaultColor}`,
+			centre: findModule("flex").flexCenter,
 			//  ^ british english is the way to go bitches
-			flex: window.ED.classMaps.alignment.flex,
-			divider: `${window.ED.classMaps.divider} ${findModule("marginTop8").marginBottom8} ${findModule("marginTop8").marginTop8}`
+			flex: findModule("flex").flex,
+			divider: `${findModule("divider").divider} ${findModule("marginTop8").marginBottom8} ${findModule("marginTop8").marginTop8}`
 		},
 		DiscordComponents: {
 			//Textbox: f(m => m.default && m.default.defaultProps && m.default.defaultProps.type == "text").default,
@@ -381,8 +381,6 @@ module.exports = new Plugin({
 					// The two required inputs, app name and ID
 					e(Input, {header: "App Name", required: true, placeholder: "Half Life 3", changeHandler: this.cgh("name")}),
 					e(Input, {header: "App ID", required: true, reqMessage:"* Required & Must be a valid RPC app", placeholder: "1337", changeHandler: this.cgh("id")}),
-
-					//e(findModule("Input").Input, {label: "xd"}),
 
 					// Check Assets Button
 					e(Button, {label: this.state.assetsButtonLabel, buttonClasses:["lookOutlined","colorWhite"], clickHandler: this.handleAssetsButton}),
