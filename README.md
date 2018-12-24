@@ -1,5 +1,9 @@
 # Enhanced Discord Plugins
 EnhancedDiscord plugins that I have made.
+[Support Server](discord.gg/na4WZpY)
+
+## If you recieve `EDApi` is not defined:
+Download and install the `EDApiPolyfill` plugin. Making sure to keep the 0 at the start of the name.
 
 ## To download:
 Either:
