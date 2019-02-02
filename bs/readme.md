@@ -6,7 +6,7 @@ This is a folder containing plugins that I made myself and simply decided to chu
 Adds a set of global functions to ease with plugin development
 
 ### Devtools Extensions
-Easily registers multiple devtools extensions. The extensions IDs are hard coded into the plugin since there is no UI so you to change have the array on line 16 to add or remove extensions.
+Easily registers multiple devtools extensions. The extensions IDs are hard coded into the plugin since there is no UI so you have to change the array on line 16 to add or remove extensions.
 
 Extensions registered by default are:
 - [React DevTools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
