@@ -21,7 +21,7 @@ module.exports = new Plugin({
 			const type = data.thisObject.props.type;
 			if (type !== MessageContextMenuType || !render.props.children[1].props.children) return render;
 			else {
-				const selection = render.props.children[1].props.children.props.value;
+				const selection = render.props.children[1].props.children.props.value.trim();
 				const selectionIsSteamKey = /^[A-Z0-9]+-[A-Z0-9]+-[A-Z0-9]+$/g.test(selection);
 				if (!selectionIsSteamKey) return render;
 
