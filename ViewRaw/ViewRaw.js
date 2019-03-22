@@ -111,7 +111,7 @@ module.exports = new Plugin({
 			return {
 				container: findModule("headerCozyMeta").container,
 				markup: findModule("markup").markup,
-				code: `${findModule("scrollbar").scrollbar} ${findModule("scrollbar").scrollbarGhost} hljs`
+				code: `${findModule("scrollbarGhost").scrollbar} ${findModule("scrollbarGhost").scrollbarGhost} hljs`
 			};
 		}
 		render() {
