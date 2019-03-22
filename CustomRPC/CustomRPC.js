@@ -5,6 +5,7 @@ const Plugin = require("../plugin"),
 	validateJson = require("json-schema"),
 	{writeFile, readFile, existsSync, mkdirSync} = require("fs"),
 	statusCodes = require("http").STATUS_CODES,
+	moment = findModule("parseZone"),
 	{ React, React:{createElement:e}, ReactDOM } = EDApi;
 
 /*
@@ -21,10 +22,10 @@ xoxo.
 module.exports = new Plugin({
 	name: "CustomRPC",
 	author: "jakuski",
-	description: "Add custom Rich Presence to your profile without additional processes. <br>Release: B3", //eslint-disable-line
+	description: "Add custom Rich Presence to your profile without additional processes.",
 	preload: false,
 	color: "DodgerBlue",
-	id: require("path").parse(__filename).name, // temp fix till #42 gets merged.,
+	id: require("path").parse(__filename).name,
 	get config () {
 		const c = window.ED.config[this.id]; // some trickery to hide UI whenever the plugin is unloaded
 		return c ? c.enabled ? {} : null : {};
@@ -47,7 +48,7 @@ module.exports = new Plugin({
 		setTimeout(this.mountReactComponent,5);
 		return `<div id="${module.exports.id || "CustomRPC"}-react-container"></div>`;
 	},
-	setPresence(options={}) {
+	setPresence(options={}, quiet=false) {
 		return new Promise(async (res, rej) => {
 			if (this.__ratelimit__.isEnforced) return rej(Error("Pushing RPC too quickly [Enforced Ratelimit]"));
 
@@ -77,13 +78,13 @@ module.exports = new Plugin({
 			if (options.smallImage) obj.args.activity.assets.small_image = options.smallImage;
 			if (options.smallText) obj.args.activity.assets.small_text = options.smallText;
 
-			if (options.timeElapse) obj.args.activity.timestamps.start = this.getTime();
-			if (options.timeCountdown) obj.args.activity.timestamps.end = this.getTime(options.timeCountdown);
+			if (options.timeElapse) obj.args.activity.timestamps.start = this.getTime(true, options.timeElapse);
+			if (options.timeCountdown) obj.args.activity.timestamps.end = this.getTime(false, options.timeCountdown);
 
 			if (options.partySize && options.partyMax) obj.args.activity.party = {
 				size: [
-					Number(options.partySize),
-					Number(options.partyMax)
+					parseInt(options.partySize),
+					parseInt(options.partyMax)
 				]
 			};
 
@@ -93,6 +94,8 @@ module.exports = new Plugin({
 				this.__ratelimit__.enforce();
 
 				res(obj);
+
+				if (quiet === true) return;
 
 				console.groupCollapsed(`%c[EnhancedDiscord] %c[${this.name}]`, "color: red;", `color: ${this.color}`, "Sucessfully applied Rich Presence");
 				for (const key in options) {
@@ -155,9 +158,13 @@ module.exports = new Plugin({
 		partySize: "Party Size",
 		partyMax: "Party Max"
 	},
-	getTime(add) {
-		if (!add) return Math.floor(new Date().valueOf() / 1000);
-		else return Math.floor((new Date().valueOf() + this.ms(add)) / 1000);
+	getTime(isElapse, date) {
+		if (isElapse === true && date === true) return moment().unix();
+		if (date instanceof Date) return moment(date).unix();
+		if (date instanceof moment) return date.unix();
+		if (typeof date === "number") return date;
+		if (isElapse === false && typeof date === "string") return moment().add(this.ms(date), "ms").unix();
+		else throw new Error("Unexpected date argument");
 	},
 	getAssets(id) {
 		return new Promise(async (res, rej) => {
@@ -887,7 +894,8 @@ module.exports = new Plugin({
 				super(props);
 
 				this.state = {
-					view: "JUST_OPENED"
+					view: "JUST_OPENED",
+					closable: true
 				};
 
 				if (!existsSync(module.exports.configPath)){ // Yeah its probably not a good idea to use sync methods but I dont know where else to put it.
@@ -905,19 +913,20 @@ module.exports = new Plugin({
 				this.renderFooter = this.renderFooter.bind(this);
 			}
 			import() {
-				this.setState({view: "AWAITING_FILE_PICKER"});
-				require("electron").remote.dialog.showOpenDialog(require("electron").remote.BrowserWindow.getAllWindows()[0], {
+				this.setState({view: "AWAITING_FILE_PICKER", closable: false});
+				require("electron").remote.dialog.showOpenDialog({
 					title: "Select a configuration",
 					defaultPath: module.exports.configPath,
 					filters:[{name:"CustomRPC Configuration", extensions:["crpc"]}, {name:"CRPC Configs + JSON", extensions:["crpc","json"]}],
 					properties:["openFile"]
 				}, dir => {
-					if (!dir) return this.setState({view: "JUST_OPENED"});
+					if (!dir) return this.setState({view: "JUST_OPENED", closable: true});
 					const path = dir[0];
 					readFile(path, {encoding: "utf-8"}, (err, str) => {
 						if (err) return this.setState(s => {
 							s.view = "ERROR:FS_ERR";
 							s.err = err;
+							s.closable = true;
 							return s;
 						});
 						let data;
@@ -927,6 +936,7 @@ module.exports = new Plugin({
 							return this.setState(s => {
 								s.view = "ERROR:INVALID_JSON";
 								s.err = e;
+								s.closable = true;
 								return s;
 							});
 						}
@@ -935,12 +945,14 @@ module.exports = new Plugin({
 						if (!validation.valid) return this.setState(s => {
 							s.view = "ERROR:INVALID_CONFIG";
 							s.err = validation.errors;
+							s.closable = true;
 							return s;
 						});
 
 						this.setState(s => {
 							s.view = "FILE_READ_OK";
 							s.file = data;
+							s.closable = true;
 							return s;
 						});
 					});
@@ -950,20 +962,21 @@ module.exports = new Plugin({
 				this.setState({view: "AWAITING_EXPORT_CONFIRM"});
 			}
 			export() {
-				this.setState({view: "AWAITING_FILE_PICKER"});
-				require("electron").remote.dialog.showSaveDialog(require("electron").remote.BrowserWindow.getAllWindows()[0], {
+				this.setState({view: "AWAITING_FILE_PICKER", closable: false});
+				require("electron").remote.dialog.showSaveDialog({
 					title: "Save a configuration",
 					defaultPath: require("path").join(module.exports.configPath,"MyConfig.crpc"),
 					filters:[{name:"CustomRPC Configuration", extensions:["crpc"]}, {name:"CRPC Configs + JSON", extensions:["crpc","json"]}]
 				}, dir => {
-					if (!dir) return this.setState({view: "AWAITING_EXPORT_CONFIRM"});
+					if (!dir) return this.setState({view: "AWAITING_EXPORT_CONFIRM", closable: true});
 					writeFile(dir, JSON.stringify(this.props.form.state.rp), err => {
 						if (err) return this.setState({
 							view: "ERROR:FS_ERR",
-							err
+							err,
+							closable: true
 						});
 
-						this.setState({view: "SAVE_SUCESS"});
+						this.setState({view: "SAVE_SUCESS", closable: true});
 					});
 				});
 			}
@@ -980,6 +993,7 @@ module.exports = new Plugin({
 				if (e) e.preventDefault();
 				this.setState(s => {
 					s.view = "JUST_OPENED";
+					s.closable = true;
 					delete s.err;
 					delete s.file;
 					return s;
@@ -1088,7 +1102,7 @@ module.exports = new Plugin({
 				return e(Modal, {size: Modal.Sizes.SMALL},
 					e(Modal.Header, null,
 						e(Title, {tag: "h4"}, "Import / Export Configs"),
-						e(Modal.CloseButton, {onClick: this.props.onClose})
+						this.state.closable ? e(Modal.CloseButton, {onClick: this.props.onClose}) : null
 					),
 					e(Modal.Content, {className: cs.lineSpacing},
 						e(Sequencer, {
@@ -1152,3 +1166,7 @@ module.exports = new Plugin({
 		function i(t,u,v,x){return Math.round(t/v)+" "+x+(u>=1.5*v?"s":"");}let j=1e3,k=60*j,l=60*k,o=24*l;b=b||{};let r=typeof a;if("string"==r&&0<a.length)return function(t){if(t+="",!(100<t.length)){let u=/^((?:\d+)?\-?\d?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i.exec(t);if(u){let v=parseFloat(u[1]),x=(u[2]||"ms").toLowerCase();return"years"===x||"year"===x||"yrs"===x||"yr"===x||"y"===x?v*(365.25*o):"weeks"===x||"week"===x||"w"===x?v*(7*o):"days"===x||"day"===x||"d"===x?v*o:"hours"===x||"hour"===x||"hrs"===x||"hr"===x||"h"===x?v*l:"minutes"===x||"minute"===x||"mins"===x||"min"===x||"m"===x?v*k:"seconds"===x||"second"===x||"secs"===x||"sec"===x||"s"===x?v*j:"milliseconds"===x||"millisecond"===x||"msecs"===x||"msec"===x||"ms"===x?v:void 0;}}}(a);if("number"==r&&!1===isNaN(a))return b.long?function(t){let u=Math.abs(t);return u>=o?i(t,u,o,"day"):u>=l?i(t,u,l,"hour"):u>=k?i(t,u,k,"minute"):u>=j?i(t,u,j,"second"):t+" ms";}(a):function(t){let u=Math.abs(t);return u>=o?Math.round(t/o)+"d":u>=l?Math.round(t/l)+"h":u>=k?Math.round(t/k)+"m":u>=j?Math.round(t/j)+"s":t+"ms";}(a);throw new Error("val is not a non-empty string or a valid number. val="+JSON.stringify(a)); //eslint-disable-line
 	}
 });
+
+module.exports.components.SelectModal.modalConfig = {
+	closable: false
+};
