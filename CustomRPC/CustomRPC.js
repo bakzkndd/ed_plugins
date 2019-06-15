@@ -25,7 +25,7 @@ module.exports = new Plugin({
 	description: "Add custom Rich Presence to your profile without additional processes.",
 	preload: false,
 	color: "DodgerBlue",
-	id: require("path").parse(__filename).name,
+	id: require("path").parse(__filename).name, // temp fix till #42 gets merged., // lol ain't removing this since it will 100% break shit
 	get config () {
 		const c = window.ED.config[this.id]; // some trickery to hide UI whenever the plugin is unloaded
 		return c ? c.enabled ? {} : null : {};
@@ -201,7 +201,8 @@ module.exports = new Plugin({
 	},
 	supportGuild: {
 		code: "na4WZpY",
-		id: "474587657213575168"
+		id: "474587657213575168",
+		supportChannelId: "474617402525483028"
 	},
 	createContextMenu(config, event) {
 		if (!event) throw new TypeError("A onContextMenu event must be provided as the second argument.");
@@ -239,7 +240,12 @@ module.exports = new Plugin({
 			Icon: EDApi.findModuleByDisplayName("Icon"),
 			Sequencer: EDApi.findModuleByDisplayName("Sequencer"),
 			LoadingSpinner: EDApi.findModuleByDisplayName("Spinner"),
-			TooltipWrapper: EDApi.findModuleByDisplayName("Tooltip"),
+			TooltipWrapper: (comp => {
+				return props => {
+					const children = () => e("div", null, props.children);
+					return e(comp, {...props, children})
+				}
+			})(EDApi.findModuleByDisplayName("Tooltip")),
 			ContextMenuItem: EDApi.findModuleByDisplayName("MenuItem"),
 			ContextMenuGroup: EDApi.findModuleByDisplayName("MenuGroup")
 		},
@@ -700,7 +706,11 @@ module.exports = new Plugin({
 				findModule("popLayer").popLayer(); // Close the settings layer popup thing
 
 				if (!findModule("getGuild").getGuild(module.exports.supportGuild.id)) findModule("acceptInvite").acceptInvite(module.exports.supportGuild.code);
-				findModule("selectGuild").selectGuild(module.exports.supportGuild.id);
+				findModule("dispatch").dispatch({
+					type: "CHANNEL_SELECT",
+					guildId: module.exports.supportGuild.id,
+					channelId: module.exports.supportGuild.supportChannelId
+				});
 			}
 			generateLinks() {
 				const links = module.exports.links;
