@@ -3,7 +3,11 @@ This is a folder containing plugins that I made myself and simply decided to chu
 **These are not designed to be user friendly and I will offer very minimal support with these plugins.**
 
 ### Plugin Dev
-Adds a set of global functions to ease with plugin development
+Adds a set of global functions to ease with plugin development.
+
+### React Playground
+
+A simple playground plugin which will render a basic component in the settings page. Useful for screwing with various Discord components.
 
 ### Devtools Extensions
 Easily registers multiple devtools extensions. The extensions IDs are hard coded into the plugin since there is no UI so you have to change the array on line 16 to add or remove extensions.
