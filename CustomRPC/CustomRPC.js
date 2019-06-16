@@ -240,12 +240,12 @@ module.exports = new Plugin({
 			Icon: EDApi.findModuleByDisplayName("Icon"),
 			Sequencer: EDApi.findModuleByDisplayName("Sequencer"),
 			LoadingSpinner: EDApi.findModuleByDisplayName("Spinner"),
-			TooltipWrapper: (comp => {
+			TooltipWrapper:/*  (comp => {
 				return props => {
 					const children = () => e("div", null, props.children);
 					return e(comp, {...props, children})
 				}
-			})(EDApi.findModuleByDisplayName("Tooltip")),
+			})(EDApi.findModuleByDisplayName("Tooltip")) */ props => e(React.Fragment, null, props.children),
 			ContextMenuItem: EDApi.findModuleByDisplayName("MenuItem"),
 			ContextMenuGroup: EDApi.findModuleByDisplayName("MenuGroup")
 		},
