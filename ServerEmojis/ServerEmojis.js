@@ -42,7 +42,12 @@ module.exports = new Plugin({
 		DiscordComponents: {
 			Modal: findModuleByDisplayName("Modal"),
 			Title: findModuleByDisplayName("FormTitle"),
-			Tooltip: findModuleByDisplayName("Tooltip"),
+			Tooltip: (Tooltip => {
+				return props => {
+					const children = tProps => e("div", Object.assign({"data-role":"tooltip-wrapper"}, tProps), props.children);
+					return e(Tooltip, props, children);
+				}
+			})(EDApi.findModuleByDisplayName("Tooltip")),
 			Text: findModuleByDisplayName("FormText"),
 		},
 		cs: {
@@ -92,12 +97,12 @@ module.exports = new Plugin({
 					),
 					e(Modal.Content, {className: cs.modalContent},
 						e("div", {ref:this.standRef},
-							e(Title, {className:cs.margTop}, "Standard Emojis - ",this.state.standardEmojis.length)
+							e(Title, {className:cs.margTop}, "Standard Emojis - ",this.state.standardEmojis.length === 0 ? "None :(" : this.state.standardEmojis.length)
 						),
 						this.state.standardEmojis.map(emoji => e(module.exports.components.EmojiRow, {emoji})),
 
 						e("div", {ref:this.animRef},
-							e(Title, {className:cs.margTop}, "Animated Emojis - ",this.state.animatedEmojis.length)
+							e(Title, {className:cs.margTop}, "Animated Emojis - ",this.state.standardEmojis.length === 0 ? "None :(" : this.state.standardEmojis.length)
 						),
 						this.state.animatedEmojis.map(emoji => e(module.exports.components.EmojiRow, {emoji}))
 					)
