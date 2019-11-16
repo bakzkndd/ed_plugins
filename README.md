@@ -1,9 +1,9 @@
-## THESE **DO NOT** WORK WITH BETTERDISCORD! They are designed for [EnhancedDiscord](https://enhanceddiscord.com/)
+## DEPRECATED, These plugins are NO LONGER MAINTAINED AND MOST LIKELY WILL NOT WORK!
+
+#### THESE **DO NOT** WORK WITH BETTERDISCORD! They are designed for [EnhancedDiscord](https://enhanceddiscord.com/)
 
 # Enhanced Discord Plugins
 EnhancedDiscord plugins that I have made.
-[Support Server](discord.gg/na4WZpY)
-
 
 ## To download:
 Either:
